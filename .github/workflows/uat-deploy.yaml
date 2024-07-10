@@ -23,10 +23,13 @@ jobs:
       
       # remote ssh deploy
       - name: remote ssh deploy
+        shell: sh
         env:
           SSH_REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
           SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
           SSH_REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}
         run: |
+          ls
+          echo "SSH_REMOTE_USER: $SSH_REMOTE_PATH"
           ssh ubuntu@0.0.0.0 -i "$SSH_REMOTE_PATH"
           exit
