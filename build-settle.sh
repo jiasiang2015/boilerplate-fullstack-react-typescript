@@ -31,5 +31,12 @@ cd v0.0.$NEW_VERSION
 printf "\n\n"
 printf "Update Env App Version for v0.0.$NEW_VERSION\n"
 sudo sed -i "s/APP_VERSION=v0.0.$PREVIOUS_VERSION/APP_VERSION=v0.0.$NEW_VERSION/g" .env
+
+printf "\n\n"
+printf "Update Permission in v0.0.$NEW_VERSION\n"
+sudo chown -R $USER:www-data storage;
+sudo chown -R $USER:www-data bootstrap/cache;
+sudo chmod -R 2775 storage;
+sudo chmod -R 2775 bootstrap/cache
 EOF
 
