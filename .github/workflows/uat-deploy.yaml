@@ -12,11 +12,23 @@ on:
 jobs:
   deloy:
     runs-on: self-hosted
+    environment: uat-deploy
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       # run build script
-      - name: execute build script
-        run: sh build.sh v1.0.0 develop
+      # - name: execute build script
+      #   run: sh build.sh v1.0.0 develop
       
+      # remote ssh deploy
+      - name: remote ssh deploy
+        shell: bash
+        env:
+          SSH_REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
+          SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
+          SSH_REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}
+        run: |
+          cd c:
+          ssh ubuntu@0.0.0.0 -i "$SSH_REMOTE_PATH"
+          exit
