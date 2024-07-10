@@ -29,7 +29,6 @@ jobs:
           SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
           SSH_REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}
         run: |
+          ssh $SSH_REMOTE_USER@$SSH_REMOTE_DOMAIN -i $SSH_REMOTE_PATH
           ls
-          echo "SSH_REMOTE_USER: $SSH_REMOTE_PATH"
-          ssh ubuntu@0.0.0.0 -i "$SSH_REMOTE_PATH"
           exit
