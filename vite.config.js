@@ -13,6 +13,15 @@ export default defineConfig(config => {
         define: {
             __APP_ENV__: JSON.stringify(env.APP_ENV),
         },
+        css: {
+            preprocessorOptions: {
+                scss: {
+                    additionalData: `
+                        @import "./resources/app/_functions";
+                    `,
+                },
+            },
+        },
         plugins: [
             laravel({
                 input: [

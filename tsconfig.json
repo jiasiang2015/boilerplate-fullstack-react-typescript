@@ -15,6 +15,7 @@
 
         /* Linting */
         "strict": true,
+        "noUnusedLocals": true,
         "noFallthroughCasesInSwitch": true,
         "baseUrl": "./resources/app",
         "paths": {

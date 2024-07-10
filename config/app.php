@@ -18,6 +18,8 @@ return [
 
     'name' => env('APP_NAME', 'Laravel'),
 
+    'title' => env('APP_TITLE', 'Laravel Application'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Environment
@@ -68,6 +70,7 @@ return [
 
     // asset url
     'asset_url' => env('APP_ASSET_URL', 'http://localhost'),
+    
 
     /*
     |--------------------------------------------------------------------------

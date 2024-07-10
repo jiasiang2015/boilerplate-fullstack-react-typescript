@@ -1,4 +1,4 @@
-import { Navigate, Route, createRoutesFromElements } from "react-router-dom";
+import { Route, createRoutesFromElements } from "react-router-dom";
 
 // 頁面
 import EntryPage from "@/pages/EntryPage";
