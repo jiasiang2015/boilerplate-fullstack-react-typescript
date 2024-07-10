@@ -31,9 +31,12 @@ jobs:
 
       # run build script
       - name: execute build script
+        shell: sh
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
-        run: sh build.sh v0.0.$NEW_VERSION develop
+        run: |
+          echo "Build version: v0.0.$NEW_VERSION"
+          sh build.sh v0.0.$NEW_VERSION develop
       
 
       # remote ssh deploy
