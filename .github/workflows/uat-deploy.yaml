@@ -23,7 +23,6 @@ jobs:
       
       # remote ssh deploy
       - name: remote ssh deploy
-        shell: bash
         env:
           SSH_REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
           SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
