@@ -17,10 +17,39 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Get Newest Version
+      - name: Get Newest Version
+        id: get_version
+        env:
+          SSH_REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
+          SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
+          SSH_REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}
+        run: |
+          OUTPUT=$(ssh $SSH_USERNAME@$SSH_DOMAIN -i $SSH_KEY_PATH << 'EOF'
+              cd /opt/bill-test/
+              echo "xxxxxxxxxxxxxxxxxxxxxxxx"
+              ls
+          EOF
+          )
+
+          # Split the output using the delimiter and focus on the part after it
+          LS_SECTION=$(echo "$OUTPUT" | sed 's/xxxxxxxxxxxxxxxxxxxxxxxx/\n/g' | tail -n 1)
+
+          VERSIONS=$(echo $LS_SECTION | grep -o 'v0\.0\.[0-9]\+')
+
+          LARGEST_VERSION=$(echo $VERSIONS | tr ' ' '\n' | sort -V | tail -n 1 | cut -d '.' -f 3)
+
+          NEW_VERSION=$((LARGEST_VERSION + 1))
+
+          echo "::set-output name=NEW_VERSION::$NEW_VERSION"
+
       # run build script
-      # - name: execute build script
-      #   run: sh build.sh v1.0.0 develop
+      - name: execute build script
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
+        run: sh build.sh v0.0.$NEW_VERSION develop
       
+
       # remote ssh deploy
       - name: remote ssh deploy
         shell: sh
@@ -28,7 +57,6 @@ jobs:
           SSH_REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
           SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
           SSH_REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}
+          NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
-          ssh $SSH_REMOTE_USER@$SSH_REMOTE_DOMAIN -i $SSH_REMOTE_PATH
-          ls
-          exit
+          sh build-remote.sh $SSH_REMOTE_USER $SSH_REMOTE_DOMAIN $SSH_REMOTE_PATH $NEW_VERSION
