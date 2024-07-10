@@ -64,13 +64,14 @@ ssh $SSH_USERNAME@$SSH_DOMAIN -i $SSH_KEY_PATH << EOF
 cd /opt/bill-test/v0.0.$NEW_VERSION
 unzip v0.0.$NEW_VERSION
 
-sudo chown -R $USER:www-data storage;
-sudo chown -R $USER:www-data bootstrap/cache;
-sudo chmod -R 2775 storage;
-sudo chmod -R 2775 bootstrap/cache
 
 cd ..
 ln -sfn v0.0.$NEW_VERSION latest
 EOF
 
 # echo ${{ secrets.STORE_FILE_BASE64 }} | base64 --decode > ${{ github.workspace }}/android/key.jks
+
+# sudo chown -R $USER:www-data storage;
+# sudo chown -R $USER:www-data bootstrap/cache;
+# sudo chmod -R 2775 storage;
+# sudo chmod -R 2775 bootstrap/cache
