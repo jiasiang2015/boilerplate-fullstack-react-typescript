@@ -2,18 +2,20 @@
 
 set -e
 
-SSH_USERNAME=${1}
+BUILD_FOLDER=${1}
 SSH_DOMAIN=${2}
 SSH_KEY_PATH=${3}
+NEW_VERSION=${4}
 
-OUTPUT=$(ssh $SSH_USERNAME@$SSH_DOMAIN -i $SSH_KEY_PATH << EOF
-    cd /opt/bill-test/
+
+OUTPUT=$(ssh $SSH_DOMAIN -i $SSH_KEY_PATH << EOF
+    cd /opt/$BUILD_FOLDER
     echo "xxxxxxxxxxxxxxxxxxxxxxxx"
     ls
 EOF
 )
 
-# Split the output using the delimiter and focus on the part after it
+# 使用 xxxxxxxxxxxxxxxxxxxxxxxx 作為字串分割，並且取最後一筆
 LS_SECTION=$(echo "$OUTPUT" | sed 's/xxxxxxxxxxxxxxxxxxxxxxxx/\n/g' | tail -n 1)
 
 VERSIONS=$(echo $LS_SECTION | grep -o 'v0\.0\.[0-9]\+')
