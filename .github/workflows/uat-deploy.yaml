@@ -29,6 +29,5 @@ jobs:
           SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
           SSH_REMOTE_PATH: ${{ secrets.SSH_REMOTE_PATH }}
         run: |
-          cd c:
           ssh ubuntu@0.0.0.0 -i "$SSH_REMOTE_PATH"
           exit
