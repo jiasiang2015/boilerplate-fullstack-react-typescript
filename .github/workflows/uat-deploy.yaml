@@ -10,9 +10,13 @@ on:
 
   
 jobs:
-  deloy:
+  deploy:
     runs-on: self-hosted
     environment: uat-deploy
+    env:
+      BUILD_FOLDER: ${{ vars.BUILD_FOLDER }}
+      SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
+      SSH_REMOTE_KEY_PATH: ${{ secrets.SSH_REMOTE_KEY_PATH }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -21,13 +25,10 @@ jobs:
       - name: Get Newest Version
         id: get_version
         shell: sh
-        env:
-          BUILD_FOLDER: ${{ vars.BUILD_FOLDER }}
-          SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
-          SSH_REMOTE_KEY_PATH: ${{ secrets.SSH_REMOTE_KEY_PATH }}
+
         run: |
           NEW_VERSION=$(sh build-version.sh $BUILD_FOLDER $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH)
-          echo "::set-output name=NEW_VERSION::$NEW_VERSION"
+          echo "NEW_VERSION=$NEW_VERSION" >> "$GITHUB_OUTPUT"
 
       # run build script
       - name: execute build script
@@ -43,9 +44,14 @@ jobs:
       - name: remote ssh deploy
         shell: sh
         env:
-          BUILD_FOLDER: ${{ vars.BUILD_FOLDER }}
-          SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
-          SSH_REMOTE_KEY_PATH: ${{ secrets.SSH_REMOTE_KEY_PATH }}
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
-          sh build-remote.sh $BUILD_FOLDER $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH $NEW_VERSION
+          sh build-remote.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
+
+      # update env & settle the project
+      - name: remote ssh project settle
+        shell: sh
+        env:
+          NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
+        run: |
+          sh build-settle.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
