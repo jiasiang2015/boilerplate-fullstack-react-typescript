@@ -20,6 +20,7 @@ jobs:
       # Get Newest Version
       - name: Get Newest Version
         id: get_version
+        shell: sh
         env:
           SSH_REMOTE_USER: ${{ secrets.SSH_REMOTE_USER }}
           SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
