@@ -20,13 +20,13 @@ SSH_KEY_PATH=${4}
 
 
 printf "\n\n"
-printf "${COLOR_LBULE} =====================================================${COLOR_NONE} \n "
-printf "${COLOR_LBULE} GET NEW_VERSION: ${COLOR_LGREEN}[v0.0.$NEW_VERSION]  ${COLOR_NONE} \n "
+printf "${COLOR_LBULE} ==================================================================== ${COLOR_NONE} \n "
+printf "${COLOR_LBULE} GET NEW_VERSION: ${COLOR_LGREEN}[v0.0.$NEW_VERSION]   ${COLOR_NONE} \n "
 
 # 建立新的資料夾
 printf "\n\n"
-printf "${COLOR_LBULE} ===================================================== ${COLOR_NONE} \n "
-printf "${COLOR_LBULE} CREATE FOLDER\n ${COLOR_LGREEN}[/opt/$BUILD_FOLDER/v0.0.$NEW_VERSION] ${COLOR_NONE} \n"
+printf "${COLOR_LBULE} ====================================================================  ${COLOR_NONE} \n "
+printf "${COLOR_LBULE} CREATE FOLDER:  ${COLOR_LGREEN}[/opt/$BUILD_FOLDER/v0.0.$NEW_VERSION] ${COLOR_NONE} \n"
 
 ssh $SSH_DOMAIN -i $SSH_KEY_PATH << EOF
 
@@ -44,7 +44,7 @@ EOF
 
 # 將檔案複製到遠端伺服器
 printf "\n\n"
-printf "${COLOR_LBULE} ===================================================== ${COLOR_NONE} \n"
+printf "${COLOR_LBULE} ====================================================================                ${COLOR_NONE} \n"
 printf "${COLOR_LBULE} COPY FILE ${COLOR_LGREEN} [./output/v0.0.$NEW_VERSION.zip] ${COLOR_LBULE} TO SERVER ${COLOR_NONE} \n"
 
 scp -i $SSH_KEY_PATH ./output/v0.0.$NEW_VERSION.zip $SSH_DOMAIN:/opt/$BUILD_FOLDER/v0.0.$NEW_VERSION
@@ -52,8 +52,8 @@ scp -i $SSH_KEY_PATH ./output/v0.0.$NEW_VERSION.zip $SSH_DOMAIN:/opt/$BUILD_FOLD
 
 # 解壓縮檔案，並設定連結
 printf "\n\n"
-printf "${COLOR_LBULE} ===================================================== ${COLOR_NONE} \n"
-printf "${COLOR_LBULE} UNPACKING ZIP AND SETTINGS ${COLOR_NONE} \n "
+printf "${COLOR_LBULE} ====================================================================  ${COLOR_NONE} \n"
+printf "${COLOR_LBULE} UNPACKING ZIP AND SETTINGS                                            ${COLOR_NONE} \n "
 
 ssh $SSH_DOMAIN -i $SSH_KEY_PATH << EOF
 
