@@ -6,19 +6,14 @@
 
 set -e
 
-# 顏色 Color
-COLOR_LBULE='\033[1;34m'
-COLOR_LGREEN='\033[1;32m'
-COLOR_LPURPLE='\033[1;35m'
-COLOR_NONE='\033[0m' # No Color
 
 BUILD_FOLDER=${1}
 SSH_DOMAIN=${2}
 SSH_KEY_PATH=${3}
 
 printf "\n\n"
-printf "${COLOR_LBULE} =====================================================\n ${COLOR_NONE}"
-printf "${COLOR_LBULE} GET NEW_VERSION\n ${COLOR_NONE}"
+printf "=====================================================\n"
+printf "GET NEW_VERSION\n"
 
 OUTPUT=$(ssh $SSH_DOMAIN -i $SSH_KEY_PATH << EOF
     cd /opt/$BUILD_FOLDER
@@ -36,6 +31,6 @@ LARGEST_VERSION=$(echo $VERSIONS | tr ' ' '\n' | sort -V | tail -n 1 | cut -d '.
 
 NEW_VERSION=$((LARGEST_VERSION + 1))
 
-printf "${COLOR_LBULE} RETRIVIE THE NEW VERSION ${COLOR_LGREEN}[v0.0.$NEW_VERSION] \n ${COLOR_NONE}"
+printf "RETRIVIE THE NEW VERSION [v0.0.$NEW_VERSION] \n"
 
 echo $NEW_VERSION
