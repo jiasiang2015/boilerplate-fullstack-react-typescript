@@ -17,8 +17,8 @@ SSH_DOMAIN=${2}
 SSH_KEY_PATH=${3}
 
 printf "\n\n"
-printf "${COLOR_LBULE} =====================================================\n ${COLOR_NONE}"
-printf "${COLOR_LBULE} GET NEW_VERSION\n ${COLOR_NONE}"
+printf "${COLOR_LBULE} ===================================================== ${COLOR_NONE} \n"
+printf "${COLOR_LBULE} GET NEW_VERSION ${COLOR_NONE} \n"
 
 OUTPUT=$(ssh $SSH_DOMAIN -i $SSH_KEY_PATH << EOF
     cd /opt/$BUILD_FOLDER
@@ -36,6 +36,7 @@ LARGEST_VERSION=$(echo $VERSIONS | tr ' ' '\n' | sort -V | tail -n 1 | cut -d '.
 
 NEW_VERSION=$((LARGEST_VERSION + 1))
 
-printf "${COLOR_LBULE} RETRIVIE THE NEW VERSION ${COLOR_LGREEN}[v0.0.$NEW_VERSION] \n ${COLOR_NONE}"
+printf "\n\n"
+printf "${COLOR_LBULE} RETRIVIE THE NEW VERSION ${COLOR_LGREEN}[v0.0.$NEW_VERSION] ${COLOR_NONE} \n"
 
 echo $NEW_VERSION
