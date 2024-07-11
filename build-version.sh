@@ -4,13 +4,13 @@
 # ====================================================================
 # =======           用於連線到 ssh 並且取得最新的版本號           =======
 
+set -e
+
 # 顏色 Color
 COLOR_LBULE='\033[1;34m'
 COLOR_LGREEN='\033[1;32m'
 COLOR_LPURPLE='\033[1;35m'
 COLOR_NONE='\033[0m' # No Color
-
-set -e
 
 BUILD_FOLDER=${1}
 SSH_DOMAIN=${2}
