@@ -28,7 +28,7 @@ jobs:
 
         run: |
           NEW_VERSION=$(sh build-version.sh $BUILD_FOLDER $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH)
-          echo "NEW_VERSION=$NEW_VERSION" >> "$GITHUB_OUTPUT"
+          echo NEW_VERSION=$NEW_VERSION >> $GITHUB_OUTPUT
 
       # run build script
       - name: execute build script
