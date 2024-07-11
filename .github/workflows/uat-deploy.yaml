@@ -27,7 +27,7 @@ jobs:
         shell: sh
 
         run: |
-          NEW_VERSION=$(sh build-version.sh $BUILD_FOLDER $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH)
+          NEW_VERSION=$(sh .script/build-version.sh $BUILD_FOLDER $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH)
           echo NEW_VERSION=$NEW_VERSION >> $GITHUB_OUTPUT
 
       # run build script
@@ -37,7 +37,7 @@ jobs:
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
           echo "Build version: v0.0.$NEW_VERSION"
-          sh build.sh v0.0.$NEW_VERSION develop
+          sh .script/build.sh v0.0.$NEW_VERSION develop
       
 
       # remote ssh deploy
@@ -46,7 +46,7 @@ jobs:
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
-          sh build-remote.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
+          sh .script/build-remote.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
 
       # update env & settle the project
       - name: remote ssh project settle
@@ -54,4 +54,4 @@ jobs:
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
-          sh build-settle.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
+          sh .script/build-settle.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
