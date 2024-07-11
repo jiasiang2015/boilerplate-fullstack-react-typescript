@@ -1,5 +1,7 @@
 #!/bin/bash -x
 
+# ====================================================================
+# =======              幫 unzip 的檔案做設定                    =======
 set -e
 
 BUILD_FOLDER=${1}
@@ -9,6 +11,7 @@ SSH_KEY_PATH=${4}
 
 PREVIOUS_VERSION=$((NEW_VERSION - 1))
 
+# 設置新的版本，設定 ENV、權限
 printf "\n\n\n"
 printf "=====================================================\n"
 printf "UPDATE WITH NEW VERSION: v0.0.$NEW_VERSION\n"
@@ -33,10 +36,14 @@ printf "Update Env App Version for v0.0.$NEW_VERSION\n"
 sudo sed -i "s/APP_VERSION=v0.0.$PREVIOUS_VERSION/APP_VERSION=v0.0.$NEW_VERSION/g" .env
 
 printf "\n\n"
-printf "Update Permission in v0.0.$NEW_VERSION\n"
+printf "Execute Permission in v0.0.$NEW_VERSION\n"
 sudo chown -R $USER:www-data storage;
 sudo chown -R $USER:www-data bootstrap/cache;
 sudo chmod -R 2775 storage;
 sudo chmod -R 2775 bootstrap/cache
+
+printf "\n\n"
+printf "Execute Laravel Command in v0.0.$PREVIOUS_VERSION\n"
+php artisan storage:link
 EOF
 
