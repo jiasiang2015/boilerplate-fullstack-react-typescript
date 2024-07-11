@@ -1,6 +1,6 @@
 name: UAT-DEPLOY-CI
 
-run-name: ${{ github.actor }} 正在執行 ${{ github.workflow }} 工作流程
+run-name: ${{ github.actor }} 正在執行 ${{ github.workflow }} 工作流程： ${{ github.event.head_commit.message }}
 
 on:
   push:

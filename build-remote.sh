@@ -21,12 +21,12 @@ SSH_KEY_PATH=${4}
 
 printf "\n\n"
 printf "${COLOR_LBULE} =====================================================\n ${COLOR_NONE}"
-printf "${COLOR_LBULE} GET NEW_VERSION: ${COLOR_LGREEN}v0.0.$NEW_VERSION\n ${COLOR_NONE}"
+printf "${COLOR_LBULE} GET NEW_VERSION: ${COLOR_LGREEN}[v0.0.$NEW_VERSION] \n ${COLOR_NONE}"
 
 # 建立新的資料夾
 printf "\n\n"
 printf "${COLOR_LBULE} =====================================================\n ${COLOR_NONE}"
-printf "${COLOR_LBULE} CREATE FOLDER\n ${COLOR_NONE} "
+printf "${COLOR_LBULE} CREATE FOLDER\n ${COLOR_LGREEN}[/opt/$BUILD_FOLDER/v0.0.$NEW_VERSION] \n ${COLOR_NONE} "
 
 ssh $SSH_DOMAIN -i $SSH_KEY_PATH << EOF
 
