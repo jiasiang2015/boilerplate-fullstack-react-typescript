@@ -23,10 +23,6 @@
                 return url;
             }
 
-            window.localeClientDefault = '{{ $localeClientDefault }}',
-            window.localeContentList = '{{ $localeContentList }}',
-            window.localeContentDefault = '{{ $localeContentDefault }}',
-
             window.liffId = '{{ $liffId }}',
             window.liffLoginMockEnable = '{{ $liffLoginMockEnable }}',
             window.liffUrl = '{{ $liffUrl }}',
