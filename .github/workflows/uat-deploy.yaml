@@ -1,57 +1,74 @@
 name: UAT-DEPLOY-CI
 
-run-name: ${{ github.actor }} 正在執行 ${{ github.workflow }} 工作流程： ${{ github.event.head_commit.message }}
+run-name: ${{ github.actor }} 正在執行 ${{ github.workflow }} 工作流程： ${{ github.event.pull_request.title }}, ${{ github.event.head_commit.message }}
 
 on:
   push:
-    branches: [ "develop" ]
+    branches:
+      - develop
   pull_request:
-    branches: [ "develop" ]
+    branches: 
+      - develop
+    types: 
+      - closed
+  workflow_dispatch:
 
   
 jobs:
   deploy:
+    if: github.event_name == 'workflow_dispatch' || github.event.pull_request.merged == true || github.event_name == 'push'
     runs-on: self-hosted
     environment: uat-deploy
     env:
       BUILD_FOLDER: ${{ vars.BUILD_FOLDER }}
-      SSH_REMOTE_DOMAIN: ${{ secrets.SSH_REMOTE_DOMAIN }}
-      SSH_REMOTE_KEY_PATH: ${{ secrets.SSH_REMOTE_KEY_PATH }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # https://stackoverflow.com/questions/64226272/caching-npm-dependency-with-github-action
+      - name: Cache NPM dependencies
+        uses: actions/cache@v2
+        with:
+          path: './node_modules'
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-node-
+
+      # https://stackoverflow.com/questions/76527896/laravel-github-workflow-action-cache-composer-dependencies-not-working-as-int
+      - name: Cache COMPOSER dependencies
+        uses: actions/cache@v2
+        with:
+          path: './vendor'
+          key: ${{ runner.os }}-laravel-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-laravel-
+
       # Get Newest Version
       - name: Get Newest Version
         id: get_version
-        shell: sh
-
         run: |
-          NEW_VERSION=$(sh .script/build-version.sh $BUILD_FOLDER $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH)
+          NEW_VERSION=$(sh .github/scripts/develop/version.sh $BUILD_FOLDER)
           echo NEW_VERSION=$NEW_VERSION >> $GITHUB_OUTPUT
 
       # run build script
-      - name: execute build script
-        shell: sh
+      - name: Execute Build Script
+        shell: bash
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
           echo "Build version: v0.0.$NEW_VERSION"
-          sh .script/build.sh v0.0.$NEW_VERSION develop
+          bash .github/scripts/develop/build.sh v0.0.$NEW_VERSION
       
-
-      # remote ssh deploy
-      - name: remote ssh deploy
-        shell: sh
+      # Deploy
+      - name: Deploy
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
-          sh .script/build-remote.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
+          bash .github/scripts/develop/deploy.sh $BUILD_FOLDER $NEW_VERSION
 
-      # update env & settle the project
-      - name: remote ssh project settle
-        shell: sh
+      # Settle
+      - name: Project Settle
         env:
           NEW_VERSION: ${{ steps.get_version.outputs.NEW_VERSION }}
         run: |
-          sh .script/build-settle.sh $BUILD_FOLDER $NEW_VERSION $SSH_REMOTE_DOMAIN $SSH_REMOTE_KEY_PATH
+          bash .github/scripts/develop/settle.sh $BUILD_FOLDER $NEW_VERSION

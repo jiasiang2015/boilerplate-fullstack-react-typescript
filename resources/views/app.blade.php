@@ -28,12 +28,11 @@
             window.liffUrl = '{{ $liffUrl }}',
 
         </script>
+        
         @if ($appDebugVconsole == true)
-            <script src="https://unpkg.com/vconsole@latest/dist/vconsole.min.js"></script>
-            <script>
-                // VConsole will be exported to `window.VConsole` by default.
-                var vConsole = new window.VConsole();
-            </script>
+        <script>
+            javascript:(function () { var script = document.createElement('script'); script.src="https://cdn.jsdelivr.net/npm/eruda"; document.body.append(script); script.onload = function () { eruda.init(); } })();
+        </script>
         @endif
 
 
